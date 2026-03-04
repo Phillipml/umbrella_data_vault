@@ -1,8 +1,13 @@
 # %%
-from config import url
+from config import cookies, headers
 import requests
 
-resp = requests.get(url)
-
-resp.status_code
+res = requests.get(
+    "https://www.residentevildatabase.com/personagens/ada-wong/",
+    cookies=cookies,
+    headers=headers,
+)
 # %%
+res.status_code
+# %%
+res.text
