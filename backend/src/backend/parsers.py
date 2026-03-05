@@ -3,7 +3,7 @@ from backend.scraper import get_character_content
 from bs4 import BeautifulSoup
 import re
 
-html = get_character_content("Albert Wesker")
+html = get_character_content("Jill Valentine")
 if html == "Error":
     print("Erro na requisição, verificar se o nome do personagem está correto")
 
@@ -35,6 +35,20 @@ def get_profile_image():
     return None
 
 
+def get_bio(soup):
+    bio_title = soup.find("h4", string=re.compile("Biografia"))
+    if not bio_title:
+        return []
+    content_bio = []
+    for p in bio_title.find_next_siblings():
+        if p.name == "p":
+            text = p.get_text().replace("\xa0", " ")
+            content_bio.append(text)
+        else:
+            break
+    return " ".join(content_bio)
+
+
 def get_basic_infos():
     character_data = {}
     if content:
@@ -53,7 +67,8 @@ def get_basic_infos():
             if ":" in text:
                 key, value = text.split(":", 1)
                 character_data[key.strip()] = value.strip()
-
+    character_bio = get_bio(soup)
+    character_data["Bio"] = character_bio
     return character_data
 
 
