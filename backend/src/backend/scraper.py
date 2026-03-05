@@ -10,4 +10,4 @@ res = requests.get(
 # %%
 res.status_code
 # %%
-res.text
+html = res.text
