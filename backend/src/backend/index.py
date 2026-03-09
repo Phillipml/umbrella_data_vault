@@ -4,9 +4,12 @@ from backend.parsers.character_detail import character_data
 
 app = FastAPI()
 
+
 @app.get("/")
 def read_root():
     return {"Umbrella": "Data System"}
+
+
 @app.get("/characters_list")
 def character_list():
     return get_all_characters()
