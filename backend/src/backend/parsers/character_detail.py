@@ -1,4 +1,5 @@
 # %%
+
 from backend.scraper import get_character_content
 from bs4 import BeautifulSoup
 import re

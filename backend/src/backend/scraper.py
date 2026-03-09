@@ -1,5 +1,5 @@
 # %%
-from config import cookies, headers
+from .config import cookies, headers
 import re
 import requests
 
