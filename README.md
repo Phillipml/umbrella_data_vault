@@ -1,20 +1,32 @@
 # Umbrella Data Vault
 
-Projeto de estudo para coletar dados de personagens de Resident Evil e expor essas informacoes para consumo no frontend.
+Projeto de estudo para coletar dados de personagens de Resident Evil e expor essas informações para consumo no frontend.
 
 ## Estrutura
 
-- `backend/`: codigo Python responsavel por buscar e transformar os dados
+- `backend/`: código Python responsável por buscar, transformar os dados e expor a API HTTP
 
 ## Status Atual
 
-O backend atualmente possui:
+O backend possui:
 
-- scraper para buscar HTML do site fonte
-- parser para listar personagens
-- parser para montar os detalhes de um personagem
-- testes automatizados para scraper e parsers
+- **Scraper** para buscar HTML do site fonte
+- **Parsers** para listar personagens e montar os detalhes de um personagem
+- **API FastAPI** com endpoints para lista de personagens e biografia
+- **Testes automatizados** para scraper, parsers e rotas da API
 
-## Proximo Passo
+## API
 
-O proximo passo natural do projeto e criar endpoints HTTP para transformar essa logica em uma API consumida pelo frontend.
+A API expõe:
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/characters_list` | Lista de personagens (`name`, `param`) |
+| GET | `/character-bio/{param}` | Biografia e dados do personagem (ou `null` se não encontrado) |
+
+Documentação interativa (Swagger): após subir o servidor, acesse `/docs`.
+
+## Próximos passos
+
+- Consumir a API no frontend
+- (Opcional) Cache ou persistência para reduzir chamadas ao site fonte
