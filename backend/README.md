@@ -10,13 +10,16 @@ Backend em Python responsável por:
 
 ```text
 backend/
-├── src/backend/
-│   ├── main.py           # app FastAPI e rotas
-│   ├── config.py         # cookies/headers para o scraper
-│   ├── scraper.py        # requisições HTTP ao site fonte
-│   └── parsers/
-│       ├── character_list.py   # lista de personagens
-│       └── character_detail.py # detalhes/biografia
+├── src/
+│   ├── index.py          # entrypoint FastAPI (Vercel + local)
+│   └── backend/
+│       ├── config.py     # cookies/headers para o scraper
+│       ├── scraper.py    # requisições HTTP ao site fonte
+│       └── parsers/
+│           ├── character_list.py   # lista de personagens
+│           └── character_detail.py # detalhes/biografia
+├── requirements.txt      # dependências para pip (ex.: Vercel)
+├── vercel.json           # (opcional) config do deploy
 └── tests/
     ├── test_scraper.py
     ├── test_character_list.py
@@ -24,12 +27,17 @@ backend/
     └── test_main.py      # testes da API
 ```
 
+O `src/index.py` configura o `sys.path` para importar o pacote `backend` e expõe o app FastAPI (rotas e tratamento de erro 503).
+
 ## API
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/characters_list` | Lista de personagens com `name` e `param` |
+| GET | `/` | Health: `{"Umbrella": "Data System"}` |
+| GET | `/characters-list` | Lista de personagens com `name` e `param` |
 | GET | `/character-bio/{param}` | Dados e biografia do personagem (slug na URL). Retorna `null` se não existir. |
+
+Se o site fonte estiver indisponível ou der timeout, `/characters-list` e `/character-bio/{param}` retornam **503** com `detail: "Source temporarily unavailable"`.
 
 Exemplo de resposta de `/characters_list`:
 
@@ -71,14 +79,16 @@ poetry shell
 Na raiz do backend (`backend/`):
 
 ```bash
-poetry run fastapi dev src/backend/main.py
+poetry run fastapi dev src/index.py
 ```
 
-Ou com uvicorn:
+Ou com uvicorn (garantindo que `src` esteja no path):
 
 ```bash
-poetry run uvicorn backend.main:app --reload --app-dir src
+cd backend && set PYTHONPATH=src && poetry run uvicorn index:app --reload
 ```
+
+No Linux/macOS use `export PYTHONPATH=src` em vez de `set PYTHONPATH=src`.
 
 Documentação interativa: http://127.0.0.1:8000/docs
 
@@ -124,10 +134,21 @@ Extração dos dados de um personagem.
 
 Rotas da API FastAPI (parsers mockados).
 
-- `GET /characters_list`: retorna 200 e lista; lista vazia quando não há personagens
+- `GET /characters-list`: retorna 200 e lista; lista vazia quando não há personagens
 - `GET /character-bio/{param}`: retorna 200 e dados quando existe; retorna 200 e `null` quando não existe
+
+## Deploy na Vercel
+
+1. Crie um projeto na Vercel apontando para o repositório.
+2. Defina **Root Directory** = `backend`.
+3. **Install Command:** `pip install -r requirements.txt`
+4. **Build Command** e **Output Directory:** deixe em branco.
+5. Faça o deploy. A Vercel detecta o app FastAPI em `src/index.py`.
+
+A API ficará disponível em `https://seu-projeto.vercel.app` (ex.: `/`, `/characters-list`, `/character-bio/ada-wong`).
 
 ## Observações
 
-- Os testes usam `mock` para simular respostas e evitar dependência de internet
-- A API chama os parsers em tempo real; para muitos acessos, considere cache ou persistência
+- Os testes usam `mock` para simular respostas e evitar dependência de internet.
+- A API chama os parsers em tempo real; para muitos acessos, considere cache ou persistência.
+- Em falha do site fonte, as rotas de lista e biografia retornam 503 em vez de derrubar a função.

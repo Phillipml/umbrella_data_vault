@@ -21,10 +21,17 @@ A API expõe:
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/characters_list` | Lista de personagens (`name`, `param`) |
+| GET | `/` | Health: `{"Umbrella": "Data System"}` |
+| GET | `/characters-list` | Lista de personagens (`name`, `param`) |
 | GET | `/character-bio/{param}` | Biografia e dados do personagem (ou `null` se não encontrado) |
 
+Em caso de falha no site fonte (timeout, indisponibilidade), os endpoints de lista e biografia retornam **503** com a mensagem `"Source temporarily unavailable"`.
+
 Documentação interativa (Swagger): após subir o servidor, acesse `/docs`.
+
+## Deploy (Vercel)
+
+O backend está preparado para deploy na Vercel como projeto separado (Root Directory = `backend`). Ver instruções em `backend/README.md`.
 
 ## Próximos passos
 
