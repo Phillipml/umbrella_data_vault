@@ -17,17 +17,21 @@ def read_root():
     return {"Umbrella": "Data System"}
 
 
-@app.get("/characters_list")
+@app.get("/characters-list")
 def character_list():
     try:
         result = get_all_characters()
         if result == "Error" or (isinstance(result, str) and "Erro" in result):
-            raise HTTPException(status_code=503, detail="Source temporarily unavailable")
+            raise HTTPException(
+                status_code=503, detail="Source temporarily unavailable"
+            )
         return result
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=503, detail="Source temporarily unavailable") from e
+        raise HTTPException(
+            status_code=503, detail="Source temporarily unavailable"
+        ) from e
 
 
 @app.get("/character-bio/{param}")
@@ -36,4 +40,6 @@ def get_character_bio(param: str):
         result = character_data(param)
         return result
     except Exception as e:
-        raise HTTPException(status_code=503, detail="Source temporarily unavailable") from e
+        raise HTTPException(
+            status_code=503, detail="Source temporarily unavailable"
+        ) from e
