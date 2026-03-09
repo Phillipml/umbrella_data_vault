@@ -5,15 +5,18 @@ from bs4 import BeautifulSoup
 import re
 
 
-def character_data(name: str):
-    html = get_character_content(name)
+def character_data(param: str):
+    html = get_character_content(param)
     if html == "Error":
-        print("Erro na requisição, verificar se o nome do personagem está correto")
+        print("Erro na requisição, verificar se o parametro do personagem está correto")
+        return None
 
     soup = BeautifulSoup(html, features="html.parser")
 
     def get_content(soup):
         find_birth_date = soup.find("em", string=re.compile("Ano de nascimento"))
+        if not find_birth_date:
+            return None
         return find_birth_date.find_parent("div")
 
     content = get_content(soup)
@@ -24,9 +27,11 @@ def character_data(name: str):
             text = name.get_text(strip=True)
             result = text.replace(" | ", ",").split(",", 1)
             return result[1]
-        return "oi"
+        return None
 
     def get_profile_image():
+        if not content:
+            return None
         img = content.find("img")
         if img and img.get("src"):
             img_src = img["src"]
@@ -71,5 +76,4 @@ def character_data(name: str):
     return get_basic_infos()
 
 
-character_data("Jill Valentine")
 # %%

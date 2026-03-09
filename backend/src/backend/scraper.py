@@ -4,10 +4,9 @@ import re
 import requests
 
 
-def get_character_content(name: str):
-    character = re.sub(r"[(),.]", "", name.strip().lower()).replace(" ", "-")
+def get_character_content(param: str):
     res = requests.get(
-        f"https://www.residentevildatabase.com/personagens/{character}/",
+        f"https://www.residentevildatabase.com/personagens/{param}/",
         cookies=cookies,
         headers=headers,
     )

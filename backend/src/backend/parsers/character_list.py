@@ -31,6 +31,3 @@ def get_all_characters():
         return characters_list
 
     return get_names_by_letters(soup)
-
-
-get_all_characters()
