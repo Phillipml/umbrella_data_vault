@@ -1,66 +1,54 @@
 # Backend
 
-Backend em Python responsavel por:
+Backend em Python responsável por:
 
 - buscar o HTML do site fonte
-- extrair a lista de personagens
-- extrair os detalhes de um personagem
-
-No momento, o projeto ainda esta na fase de parser e testes. A camada de endpoints HTTP sera o proximo passo.
+- extrair a lista de personagens e os detalhes de um personagem
+- expor uma API HTTP (FastAPI) para consumo pelo frontend
 
 ## Estrutura
 
 ```text
 backend/
-├─ src/backend/
-│  ├─ scraper.py
-│  └─ parsers/
-│     ├─ character_list.py
-│     └─ character_detail.py
-└─ tests/
-   ├─ test_scraper.py
-   ├─ test_character_list.py
-   └─ test_character_detail.py
+├── src/backend/
+│   ├── main.py           # app FastAPI e rotas
+│   ├── config.py         # cookies/headers para o scraper
+│   ├── scraper.py        # requisições HTTP ao site fonte
+│   └── parsers/
+│       ├── character_list.py   # lista de personagens
+│       └── character_detail.py # detalhes/biografia
+└── tests/
+    ├── test_scraper.py
+    ├── test_character_list.py
+    ├── test_character_detail.py
+    └── test_main.py      # testes da API
 ```
 
-## Arquivos Principais
+## API
 
-### `src/backend/scraper.py`
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/characters_list` | Lista de personagens com `name` e `param` |
+| GET | `/character-bio/{param}` | Dados e biografia do personagem (slug na URL). Retorna `null` se não existir. |
 
-Responsavel por fazer as requisicoes HTTP para o site fonte.
+Exemplo de resposta de `/characters_list`:
 
-- `get_character_list()`: busca a pagina com todos os personagens
-- `get_character_content(param)`: busca a pagina de detalhe de um personagem pelo parametro da URL
-
-### `src/backend/parsers/character_list.py`
-
-Transforma o HTML da pagina de personagens em uma lista de objetos com:
-
-- `name`
-- `param`
-
-Exemplo de retorno:
-
-```python
+```json
 [
-    {"name": "Ada Wong", "param": "ada-wong"},
-    {"name": "Albert Wesker", "param": "albert-wesker"},
+  {"name": "Ada Wong", "param": "ada-wong"},
+  {"name": "Albert Wesker", "param": "albert-wesker"}
 ]
 ```
 
-### `src/backend/parsers/character_detail.py`
+Exemplo de resposta de `/character-bio/ada-wong`:
 
-Transforma o HTML de um personagem em um dicionario com informacoes basicas.
-
-Exemplo de retorno:
-
-```python
+```json
 {
-    "Name": "Ada Wong",
-    "Img": "https://img.example/ada.png",
-    "Ano de nascimento": "1974",
-    "Altura": "1,70 m",
-    "Bio": "Ada e uma espia misteriosa."
+  "Name": "Ada Wong",
+  "Img": "https://...",
+  "Ano de nascimento": "1974",
+  "Altura": "1,70 m",
+  "Bio": "..."
 }
 ```
 
@@ -72,54 +60,74 @@ Com Poetry:
 poetry install
 ```
 
-Se preferir usar o ambiente virtual do Poetry:
+Para ativar o ambiente virtual:
 
 ```bash
 poetry shell
 ```
 
-## Como rodar os testes
+## Como rodar a API
 
-O projeto tem `pytest` instalado, mas os testes foram escritos de forma simples com `unittest`. Por isso, voce pode rodar de dois jeitos.
-
-### Rodando com pytest
+Na raiz do backend (`backend/`):
 
 ```bash
-pytest
+poetry run fastapi dev src/backend/main.py
 ```
 
-### Rodando com unittest
+Ou com uvicorn:
 
 ```bash
-python -m unittest discover -s tests -p "test_*.py"
+poetry run uvicorn backend.main:app --reload --app-dir src
+```
+
+Documentação interativa: http://127.0.0.1:8000/docs
+
+## Como rodar os testes
+
+Com pytest (recomendado):
+
+```bash
+poetry run pytest
+```
+
+Com unittest:
+
+```bash
+poetry run python -m unittest discover -s tests -p "test_*.py"
 ```
 
 ## O que os testes cobrem
 
 ### `tests/test_scraper.py`
 
-Valida o comportamento do scraper sem acessar a internet de verdade.
+Comportamento do scraper (sem acessar a internet).
 
-- quando a requisicao responde `200`, retorna o HTML
-- quando a requisicao falha, retorna `"Error"`
+- Requisição com status 200 retorna o HTML
+- Requisição com falha retorna `"Error"`
 
 ### `tests/test_character_list.py`
 
-Valida a extracao da lista de personagens.
+Extração da lista de personagens a partir do HTML.
 
-- monta corretamente os campos `name` e `param`
-- retorna lista vazia quando nao encontra personagens no HTML
+- Monta corretamente os campos `name` e `param`
+- Retorna lista vazia quando não encontra personagens
 
 ### `tests/test_character_detail.py`
 
-Valida a extracao dos dados de um personagem.
+Extração dos dados de um personagem.
 
-- monta nome, imagem, bio e atributos basicos
-- retorna `None` quando o scraper falha
-- nao quebra quando falta `"Ano de nascimento"` no HTML
+- Monta nome, imagem, bio e atributos básicos
+- Retorna `None` quando o scraper falha
+- Não quebra quando falta "Ano de nascimento" no HTML
 
-## Observacoes
+### `tests/test_main.py`
 
-- Os testes usam `mock` para simular respostas e evitar dependencia de internet
-- O objetivo atual e manter os parsers confiaveis antes de criar os endpoints
-- Quando a API for criada, o ideal sera adicionar testes para as rotas tambem
+Rotas da API FastAPI (parsers mockados).
+
+- `GET /characters_list`: retorna 200 e lista; lista vazia quando não há personagens
+- `GET /character-bio/{param}`: retorna 200 e dados quando existe; retorna 200 e `null` quando não existe
+
+## Observações
+
+- Os testes usam `mock` para simular respostas e evitar dependência de internet
+- A API chama os parsers em tempo real; para muitos acessos, considere cache ou persistência
