@@ -10,3 +10,12 @@ dev-front:
 
 dev-back:
 	${POETRY} fastapi dev index.py
+
+format-back:
+	${NPM} ruff format .
+
+format-front:
+	${NPM} format
+
+lint-front:
+	${NPM} lint
