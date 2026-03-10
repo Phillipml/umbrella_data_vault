@@ -1,9 +1,7 @@
-type Character = {
+export type CharacterListed = {
     name: string,
     param: string
 }
-
-export type CharacterList = Character[]
 
 export type CharacterData = {
     name: string,
