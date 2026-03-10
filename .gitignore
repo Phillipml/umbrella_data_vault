@@ -1,0 +1,70 @@
+# ========================
+# Python / Poetry (backend)
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.Python
+
+# Poetry
+poetry.lock
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# ruff / linting
+.ruff_cache/
+
+# ========================
+# Next.js / Node (frontend)
+# ========================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
+frontend/coverage/
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
+frontend/.vercel
+
+# ========================
+# Environment / Secrets
+# ========================
+.env
+.env.*
+!.env.example
+
+# ========================
+# OS / Editor
+# ========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.pem
