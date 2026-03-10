@@ -58,22 +58,28 @@ def character_data(param: str):
             character_img = get_profile_image()
 
             if character_name:
-                character_data["Name"] = character_name
+                character_data["name"] = character_name
             if character_img:
-                character_data["Img"] = character_img["img_src"]
+                character_data["img"] = character_img["img_src"]
             character_ems = content.find_all("em")
 
             for i in character_ems:
                 text = i.get_text(strip=True)
-
+                LABEL_TO_KEY = {
+                    "Name": "name",
+                    "Img": "img",
+                    "Ano de nascimento": "birth",
+                    "Tipo sanguíneo": "bloodType",
+                    "Altura": "height",
+                    "Peso": "weight",
+                    "Bio": "bio",
+                }
                 if ":" in text:
                     key, value = text.split(":", 1)
-                    character_data[key.strip()] = value.strip()
+                    field = LABEL_TO_KEY.get(key.strip())
+                    character_data[field] = value.strip()
         character_bio = get_bio(soup)
-        character_data["Bio"] = character_bio
+        character_data["bio"] = character_bio
         return character_data
 
     return get_basic_infos()
-
-
-# %%
