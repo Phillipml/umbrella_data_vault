@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root {
+  --background: #121011;
+  --text: #CCCDCA;
+  --alternative: #9C1C1B;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-text: var(--text);
+  --color-alternative: var(--alternative);
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: "Montserrat", sans-serif;
+}
