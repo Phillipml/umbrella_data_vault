@@ -5,8 +5,8 @@ install:
 	cd backend/src && poetry install
 	cd frontend && npm install
 
-dev-frontend:
+dev-front:
 	${NPM} dev
 
-dev-backend:
+dev-back:
 	${POETRY} fastapi dev index.py
