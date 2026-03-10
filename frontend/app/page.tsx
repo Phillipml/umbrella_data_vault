@@ -24,14 +24,14 @@ export default function Home() {
     }
     return (
       <div className="w-2/4 h-100 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom ">
-        {' '}
         {data?.map((i) => (
-          <button
+          <a
             key={i.param}
-            className="w-80 mb-2 border-b border-alternative rounded-2xl cursor-pointer hover:shadow-md hover:shadow-alternative hover:text-shadow-lg/30 hover:text-shadow-alternative"
+            href={`/${i.param}`}
+            className="w-80 mb-2 border-b border-alternative rounded-2xl text-center cursor-pointer hover:shadow-md hover:shadow-alternative hover:text-shadow-lg/30 hover:text-shadow-alternative"
           >
             {i.name}
-          </button>
+          </a>
         ))}
       </div>
     )
