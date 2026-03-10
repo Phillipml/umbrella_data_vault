@@ -17,3 +17,17 @@ body {
   color: var(--text);
   font-family: "Montserrat", sans-serif;
 }
+.scrollbar-custom {
+  scrollbar-width: thin;                              /* Firefox */
+  scrollbar-color: var(--alternative) transparent;   /* Firefox */
+}
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--alternative);
+  border-radius: 9999px;
+}
