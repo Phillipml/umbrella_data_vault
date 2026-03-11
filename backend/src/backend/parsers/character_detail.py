@@ -14,7 +14,7 @@ def character_data(param: str):
     soup = BeautifulSoup(html, features="html.parser")
 
     def get_content(soup):
-        find_birth_date = soup.find("em", string=re.compile("Ano de nascimento"))
+        find_birth_date = soup.find("em", string=re.compile("nascimento:"))
         if not find_birth_date:
             return None
         return find_birth_date.find_parent("div")

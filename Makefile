@@ -12,7 +12,7 @@ dev-back:
 	${POETRY} fastapi dev index.py
 
 format-back:
-	${NPM} ruff format .
+	${POETRY} ruff format .
 
 format-front:
 	${NPM} format
