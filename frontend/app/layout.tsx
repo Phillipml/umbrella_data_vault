@@ -22,13 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`antialiased ${montserrat.className}`}>
+      <body
+        className={`antialiased ${montserrat.className}`}
+        suppressHydrationWarning
+      >
         <Providers>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <div className="mt-32 mb-32 flex-1">{children}</div>
-            <Footer />
+          <Header />
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="mt-32 mb-32 flex-1 min-h-0">{children}</div>
           </div>
+          <Footer />
         </Providers>
       </body>
     </html>

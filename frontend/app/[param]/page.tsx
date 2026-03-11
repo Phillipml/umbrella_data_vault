@@ -20,17 +20,27 @@ export default function CharacterDetail() {
     )
   }
   return (
-    <div className="w-3/4 m-auto h-148 flex flex-wrap justify-center items-center lg:w-10/12">
-      <div className="relative w-3xl mr-4 h-148 overflow-hidden rounded-xl">
-        <Image
-          src={`${data?.img}` || '/umbrella-icon.png'}
-          alt="logo"
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
+    <div className="w-3/4 m-auto mb-2 flex flex-wrap justify-center items-center lg:w-10/12">
+      <div className="relative w-md mr-4 h-100 overflow-hidden rounded-xl">
+        {data?.img ? (
+          <Image
+            src={data.img}
+            alt="logo"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <Image
+            src={'/umbrella-icon.png'}
+            alt="logo"
+            fill
+            className="object-contain"
+            sizes="100vw"
+          />
+        )}
       </div>
-      <div className="w-1/2 sm:mt-4 h-full flex flex-col gap-4 border-t-2 border-l-2 border-alternative pl-4 pt-4">
+      <div className="w-full lg:w-1/2 mt-12 lg:mt-0 h-100 flex flex-col gap-4 border-t-2 border-l-2 border-alternative pl-4 pt-4">
         <ul>
           <li>Nome: {data?.name}</li>
           <li>Ano de Nascimento: {data?.birth}</li>
