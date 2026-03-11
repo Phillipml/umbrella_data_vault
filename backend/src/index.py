@@ -13,10 +13,15 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://umbrella-data-vault-u51w.vercel.app"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://umbrella-data-vault-u51w.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"])
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 def read_root():
