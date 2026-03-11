@@ -1,7 +1,6 @@
 'use client'
 import Image from 'next/image'
 import { useGetCharactersListQuery } from './lib/api'
-import Header from './layout/Header'
 
 export default function Home() {
   const { data, isError, isLoading } = useGetCharactersListQuery()
@@ -40,7 +39,6 @@ export default function Home() {
   return (
     <>
       <div className="max-w-[1400px] m-auto">
-        lg:{' '}
         <div className="w-3/4 m-auto mt-6 text-center lg:w-1/2">
           <h2>Umbrella Corporation — Arquivos restritos</h2>{' '}
           <p className="uppercase italic text-sm">
