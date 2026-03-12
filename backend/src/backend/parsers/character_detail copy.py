@@ -1,7 +1,8 @@
+# %%
+
 from backend.scraper import get_character_content
 from bs4 import BeautifulSoup
 import re
-import unicodedata
 
 
 def character_data(param: str):
@@ -13,10 +14,10 @@ def character_data(param: str):
     soup = BeautifulSoup(html, features="html.parser")
 
     def get_content(soup):
-        find_birth = soup.find(string=re.compile(r"nascimento:", re.IGNORECASE))
-        if not find_birth:
+        find_birth_date = soup.find("em", string=re.compile("nascimento:"))
+        if not find_birth_date:
             return None
-        return find_birth.find_parent("div")
+        return find_birth_date.find_parent("div")
 
     content = get_content(soup)
 
@@ -51,43 +52,37 @@ def character_data(param: str):
         return " ".join(content_bio)
 
     def get_basic_infos():
-        def normalize_label(label: str) -> str:
-            cleaned = label.replace("\xa0", " ").strip().lower()
-            without_accents = "".join(
-                char
-                for char in unicodedata.normalize("NFKD", cleaned)
-                if not unicodedata.combining(char)
-            )
-            return " ".join(without_accents.split())
-
         character_data = {}
         if content:
             character_name = get_name(soup)
             character_img = get_profile_image()
-            LABEL_TO_KEY = {
-                "ano de nascimento": "birth",
-                "de nascimento": "birth",
-                "tipo sanguineo": "bloodType",
-                "altura": "height",
-                "peso": "weight",
-            }
 
             if character_name:
                 character_data["name"] = character_name
-                if character_img:
-                    character_data["img"] = character_img["img_src"]
-            text = content.get_text(separator="\n", strip=True)
-            for line in text.splitlines():
-                if ":" not in line:
-                    continue
-                key, value = line.split(":", 1)
-                normalized_key = normalize_label(key)
-                field = LABEL_TO_KEY.get(normalized_key)
-                if field:
-                    character_data[field] = value.strip()
+            if character_img:
+                character_data["img"] = character_img["img_src"]
+            character_ems = content.find_all("em")
 
-            character_bio = get_bio(soup)
-            character_data["bio"] = character_bio
-            return character_data
+            for i in character_ems:
+                text = i.get_text(strip=True)
+                LABEL_TO_KEY = {
+                    "Name": "name",
+                    "Img": "img",
+                    "Ano de nascimento": "birth",
+                    "Tipo sanguíneo": "bloodType",
+                    "Altura": "height",
+                    "Peso": "weight",
+                    "Bio": "bio",
+                }
+                if ":" in text:
+                    key, value = text.split(":", 1)
+                    field = LABEL_TO_KEY.get(key.strip())
+                    character_data[field] = value.strip()
+        character_bio = get_bio(soup)
+        character_data["bio"] = character_bio
+        return character_data
 
     return get_basic_infos()
+
+
+# %%
