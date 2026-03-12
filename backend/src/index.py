@@ -49,8 +49,26 @@ def character_list():
 def get_character_bio(param: str):
     try:
         result = character_data(param)
-        return result
+        status = result.get("status")
+
+        if status == "not_found":
+            raise HTTPException(
+                status_code=404,
+                detail="Character not found at source",
+            )
+
+        if status != "ok":
+            raise HTTPException(
+                status_code=503,
+                detail="Source temporarily unavailable",
+            )
+
+        return result["data"]
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
-            status_code=503, detail="Source temporarily unavailable"
+            status_code=503,
+            detail="Source temporarily unavailable",
         ) from e

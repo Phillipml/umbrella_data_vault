@@ -5,11 +5,11 @@ import unicodedata
 
 
 def character_data(param: str):
-    html = get_character_content(param)
-    if html == "Error":
-        print("Erro na requisição, verificar se o parametro do personagem está correto")
-        return None
+    source = get_character_content(param)
+    if source["status"] != "ok":
+        return source
 
+    html = source["html"]
     soup = BeautifulSoup(html, features="html.parser")
 
     def get_content(soup):
@@ -19,6 +19,8 @@ def character_data(param: str):
         return find_birth.find_parent("div")
 
     content = get_content(soup)
+    if not content:
+        return {"status": "not_found", "html": None}
 
     def get_name(soup):
         name = soup.find("span", string=re.compile("Personagens"))
@@ -29,18 +31,15 @@ def character_data(param: str):
         return None
 
     def get_profile_image():
-        if not content:
-            return None
         img = content.find("img")
         if img and img.get("src"):
-            img_src = img["src"]
-            return {"img_src": img_src}
+            return img["src"]
         return None
 
     def get_bio(soup):
         bio_title = soup.find("h4", string=re.compile("Biografia"))
         if not bio_title:
-            return []
+            return ""
         content_bio = []
         for p in bio_title.find_next_siblings():
             if p.name == "p":
@@ -50,44 +49,44 @@ def character_data(param: str):
                 break
         return " ".join(content_bio)
 
-    def get_basic_infos():
-        def normalize_label(label: str) -> str:
-            cleaned = label.replace("\xa0", " ").strip().lower()
-            without_accents = "".join(
-                char
-                for char in unicodedata.normalize("NFKD", cleaned)
-                if not unicodedata.combining(char)
-            )
-            return " ".join(without_accents.split())
+    def normalize_label(label: str) -> str:
+        cleaned = label.replace("\xa0", " ").strip().lower()
+        without_accents = "".join(
+            ch
+            for ch in unicodedata.normalize("NFKD", cleaned)
+            if not unicodedata.combining(ch)
+        )
+        return " ".join(without_accents.split())
 
-        character_data = {}
-        if content:
-            character_name = get_name(soup)
-            character_img = get_profile_image()
-            LABEL_TO_KEY = {
-                "ano de nascimento": "birth",
-                "de nascimento": "birth",
-                "tipo sanguineo": "bloodType",
-                "altura": "height",
-                "peso": "weight",
-            }
+    label_to_key = {
+        "ano de nascimento": "birth",
+        "de nascimento": "birth",
+        "tipo sanguineo": "bloodType",
+        "altura": "height",
+        "peso": "weight",
+    }
 
-            if character_name:
-                character_data["name"] = character_name
-                if character_img:
-                    character_data["img"] = character_img["img_src"]
-            text = content.get_text(separator="\n", strip=True)
-            for line in text.splitlines():
-                if ":" not in line:
-                    continue
-                key, value = line.split(":", 1)
-                normalized_key = normalize_label(key)
-                field = LABEL_TO_KEY.get(normalized_key)
-                if field:
-                    character_data[field] = value.strip()
+    data = {}
+    character_name = get_name(soup)
+    character_img = get_profile_image()
 
-            character_bio = get_bio(soup)
-            character_data["bio"] = character_bio
-            return character_data
+    if character_name:
+        data["name"] = character_name
+    if character_img:
+        data["img"] = character_img
 
-    return get_basic_infos()
+    text = content.get_text(separator="\n", strip=True)
+    for line in text.splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        field = label_to_key.get(normalize_label(key))
+        if field:
+            data[field] = value.strip()
+
+    data["bio"] = get_bio(soup)
+
+    if not data.get("name"):
+        return {"status": "not_found", "html": None}
+
+    return {"status": "ok", "data": data}
