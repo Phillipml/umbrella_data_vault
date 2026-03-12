@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <>
       <div className="max-w-[1400px] m-auto">
-        <div className="w-3/4 m-auto mt-6 text-center lg:w-full">
+        <div className="w-3/4 m-auto mt-6 text-center lg:w-1/2">
           <h2>Umbrella Corporation — Arquivos restritos</h2>{' '}
           <p className="uppercase italic text-sm">
             &quot;our business is life itself&quot;

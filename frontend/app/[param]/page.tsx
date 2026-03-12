@@ -57,18 +57,27 @@ export default function CharacterDetail() {
   const imageSrc = data?.img ? data.img : '/umbrella-icon.png'
 
   return (
-    <div className="w-11/12 max-w-[1200px] m-auto flex flex-col lg:flex-row justify-center items-start gap-4">
-      <div className="relative w-full lg:w-3/5 h-88 sm:h-112 lg:h-148 overflow-hidden rounded-xl">
-        <Image
-          src={imageSrc}
-          alt={data?.name ?? 'personagem'}
-          fill
-          className="object-contain"
-          sizes="(max-width: 1024px) 100vw, 60vw"
-        />
+    <div className="w-3/4 m-auto mb-2 flex flex-wrap justify-center items-center lg:w-10/12">
+      <div className="relative w-md mr-4 h-100 overflow-hidden rounded-xl">
+        {data?.img ? (
+          <Image
+            src={data.img}
+            alt="logo"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <Image
+            src={'/umbrella-icon.png'}
+            alt="logo"
+            fill
+            className="object-contain"
+            sizes="100vw"
+          />
+        )}
       </div>
-
-      <div className="w-full lg:w-2/5 lg:h-148 flex flex-col gap-4 border-t-2 lg:border-t-0 lg:border-l-2 border-alternative pl-0 pt-4 lg:pl-4 lg:pt-0">
+      <div className="w-full lg:w-1/2 mt-12 lg:mt-0 h-100 flex flex-col gap-4 border-t-2 border-l-2 border-alternative pl-4 pt-4">
         <ul>
           <li>Nome: {data?.name ?? '-'}</li>
           <li>Ano de Nascimento: {data?.birth ?? '-'}</li>

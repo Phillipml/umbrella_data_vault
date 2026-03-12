@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-text p-2 w-full fixed bottom-0 bg-background">
+    <footer className="border-t-2 border-text p-2 w-full bg-background ">
       <p className="text-center">
         Projeto criado por{' '}
         <a
