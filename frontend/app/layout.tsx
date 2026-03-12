@@ -28,7 +28,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          <div className="flex flex-col flex-1 min-h-0">
+          <div className="flex flex-col flex-1 min-h-0 p-2">
             <div className="mt-32 mb-32 flex-1 min-h-0">{children}</div>
           </div>
           <Footer />

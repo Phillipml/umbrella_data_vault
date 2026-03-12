@@ -3,15 +3,21 @@ import { useGetCharacterDataQuery } from '@/app/lib/api'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 
 export default function CharacterDetail() {
   const params = useParams<{ param: string }>()
   const param = params?.param
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   const { data, isLoading, isError, error } = useGetCharacterDataQuery(
     param ?? null
   )
+
+  useEffect(() => {
+    setImageLoaded(false)
+  }, [data?.img, param])
 
   if (isLoading) {
     return (
@@ -54,30 +60,48 @@ export default function CharacterDetail() {
     )
   }
 
-  const imageSrc = data?.img ? data.img : '/umbrella-icon.png'
-
   return (
     <div className="w-3/4 m-auto mb-2 flex flex-wrap justify-center items-center lg:w-10/12">
       <div className="relative w-md mr-4 h-100 overflow-hidden rounded-xl">
         {data?.img ? (
-          <Image
-            src={data.img}
-            alt="logo"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
+          <>
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/90 z-10 rounded-xl">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                  <Image
+                    src="/umbrella-icon.png"
+                    alt=""
+                    fill
+                    className="object-contain animate-spin"
+                    sizes="96px"
+                  />
+                </div>
+              </div>
+            )}
+            <Image
+              src={data.img}
+              alt={data?.name ?? 'Personagem'}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              onLoad={() => setImageLoaded(true)}
+            />
+          </>
         ) : (
-          <Image
-            src={'/umbrella-icon.png'}
-            alt="logo"
-            fill
-            className="object-contain"
-            sizes="100vw"
-          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28">
+              <Image
+                src="/umbrella-icon.png"
+                alt="Sem imagem"
+                fill
+                className="object-contain animate-spin"
+                sizes="112px"
+              />
+            </div>
+          </div>
         )}
       </div>
-      <div className="w-full lg:w-1/2 mt-12 lg:mt-0 h-100 flex flex-col gap-4 border-t-2 border-l-2 border-alternative pl-4 pt-4">
+      <div className="w-full lg:w-1/2 mt-12 lg:mt-0 h-180 lg:h-100 flex flex-col gap-4 border-t-2 border-l-2 border-alternative pl-4 pt-4">
         <ul>
           <li>Nome: {data?.name ?? '-'}</li>
           <li>Ano de Nascimento: {data?.birth ?? '-'}</li>
