@@ -12,7 +12,7 @@ export default function Home() {
             &quot;our business is life itself&quot;
           </p>
         </div>
-        <div className="w-3/4 m-auto mt-6 lg:w-full">
+        <div className="w-3/4 m-auto mt-6 rounded-2xl border-b border-t mb-8 p-4 lg:w-10/12">
           <p className="text-sm">
             Você está visualizando registros internos obtidos pela Umbrella
             Corporation sobre indivíduos envolvidos, direta ou indiretamente, em

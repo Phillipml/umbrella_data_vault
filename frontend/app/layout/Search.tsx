@@ -16,7 +16,7 @@ export default function Search({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className={`border-b border-alternative rounded outline-0 ${className}`}
+      className={`border-b border-alternative rounded-4xl outline-0 shadow-md shadow-alternative ${className}`}
     />
   )
 }
