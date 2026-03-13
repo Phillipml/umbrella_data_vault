@@ -33,7 +33,13 @@ export default function List() {
   }
   return (
     <>
-      <Search value={searchTerm} onChange={setSearchTerm} />
+      <div className="flex justify-center">
+        <Search
+          value={searchTerm}
+          onChange={setSearchTerm}
+          className="text-center w-full max-w-md"
+        />
+      </div>
       <div className="w-2/4 h-100 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom lg:w-full">
         {isSearch
           ? data?.map((i) => (
