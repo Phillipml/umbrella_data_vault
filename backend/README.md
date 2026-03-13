@@ -1,6 +1,6 @@
-# Backend
+# Umbrella Data Vault — Backend
 
-Backend em Python responsável por:
+Backend em Python do projeto [Umbrella Data Vault](../README.md). Responsável por:
 
 - buscar o HTML do site fonte
 - extrair a lista de personagens e os detalhes de um personagem
@@ -152,3 +152,5 @@ A API ficará disponível em `https://seu-projeto.vercel.app` (ex.: `/`, `/chara
 - Os testes usam `mock` para simular respostas e evitar dependência de internet.
 - A API chama os parsers em tempo real; para muitos acessos, considere cache ou persistência.
 - Em falha do site fonte, as rotas de lista e biografia retornam 503 em vez de derrubar a função.
+
+Para rodar o projeto completo (backend + frontend), use os comandos do [Makefile na raiz](../README.md#como-rodar).

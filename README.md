@@ -1,23 +1,56 @@
 # Umbrella Data Vault
 
-Projeto de estudo para coletar dados de personagens de Resident Evil e expor essas informações para consumo no frontend.
+Projeto de estudo para coletar dados de personagens de Resident Evil e exibir em uma interface web. O backend busca e transforma os dados do site fonte; o frontend consome a API e exibe lista e detalhes dos personagens.
 
 ## Estrutura
 
-- `backend/`: código Python responsável por buscar, transformar os dados e expor a API HTTP
+| Pasta       | Descrição |
+|------------|-----------|
+| `backend/` | API em Python (FastAPI): scraper, parsers e endpoints HTTP |
+| `frontend/`| Aplicação Next.js (React): lista de personagens, busca e página de detalhe |
 
-## Status Atual
+## Como rodar
 
-O backend possui:
+### Pré-requisitos
 
-- **Scraper** para buscar HTML do site fonte
-- **Parsers** para listar personagens e montar os detalhes de um personagem
-- **API FastAPI** com endpoints para lista de personagens e biografia
-- **Testes automatizados** para scraper, parsers e rotas da API
+- Node.js e npm (frontend)
+- Python 3 e Poetry (backend)
 
-## API
+### Instalação
 
-A API expõe:
+Na raiz do repositório:
+
+```bash
+make install
+```
+
+Isso executa `poetry install` no backend e `npm install` no frontend.
+
+### Desenvolvimento
+
+- **Frontend** (Next.js em http://localhost:3000):
+
+  ```bash
+  make dev-front
+  ```
+
+- **Backend** (FastAPI):
+
+  ```bash
+  make dev-back
+  ```
+
+O frontend consome a API via `NEXT_PUBLIC_API_BASE` (ex.: `http://127.0.0.1:8000`). Configure no `frontend/.env` se necessário.
+
+### Outros comandos (Makefile)
+
+| Comando        | Ação                    |
+|----------------|-------------------------|
+| `make format-front` | Prettier no frontend   |
+| `make format-back`   | Ruff no backend        |
+| `make lint-front`    | ESLint no frontend     |
+
+## API (backend)
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
@@ -25,15 +58,11 @@ A API expõe:
 | GET | `/characters-list` | Lista de personagens (`name`, `param`) |
 | GET | `/character-bio/{param}` | Biografia e dados do personagem (ou `null` se não encontrado) |
 
-Em caso de falha no site fonte (timeout, indisponibilidade), os endpoints de lista e biografia retornam **503** com a mensagem `"Source temporarily unavailable"`.
+Em falha do site fonte, os endpoints de lista e biografia retornam **503** com `"Source temporarily unavailable"`. Documentação interativa: `/docs` (Swagger).
 
-Documentação interativa (Swagger): após subir o servidor, acesse `/docs`.
+Detalhes de instalação, testes e deploy do backend: [backend/README.md](backend/README.md).
 
-## Deploy (Vercel)
+## Documentação por parte
 
-O backend está preparado para deploy na Vercel como projeto separado (Root Directory = `backend`). Ver instruções em `backend/README.md`.
-
-## Próximos passos
-
-- Consumir a API no frontend
-- (Opcional) Cache ou persistência para reduzir chamadas ao site fonte
+- [backend/README.md](backend/README.md) — API, testes, deploy na Vercel
+- [frontend/README.md](frontend/README.md) — Next.js, estrutura e variáveis de ambiente
