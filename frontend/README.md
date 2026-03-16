@@ -61,13 +61,13 @@ Acesse [http://localhost:3000](http://localhost:3000). A lista e o detalhe depen
 
 ## Scripts (package.json)
 
-| Script   | Comando           | Descrição              |
-|----------|-------------------|------------------------|
-| dev      | `npm run dev`     | Servidor de desenvolvimento |
-| build    | `npm run build`   | Build de produção      |
-| start    | `npm run start`   | Servidor de produção   |
-| lint     | `npm run lint`    | ESLint                 |
-| format   | `npm run format`  | Prettier               |
+| Script | Comando          | Descrição                   |
+| ------ | ---------------- | --------------------------- |
+| dev    | `npm run dev`    | Servidor de desenvolvimento |
+| build  | `npm run build`  | Build de produção           |
+| start  | `npm run start`  | Servidor de produção        |
+| lint   | `npm run lint`   | ESLint                      |
+| format | `npm run format` | Prettier                    |
 
 ## Conteúdo e créditos
 
