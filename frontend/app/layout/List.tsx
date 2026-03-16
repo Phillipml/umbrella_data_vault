@@ -41,7 +41,7 @@ export default function List() {
         />
       </div>
       {isSearch ? (
-        <div className="w-3/4 h-96 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom lg:w-full">
+        <div className="w-3/4 h-96 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom lg:w-10/12">
           {data?.map((i) => (
             <a
               key={i.param}
@@ -53,7 +53,7 @@ export default function List() {
           ))}
         </div>
       ) : (
-        <div className="w-3/4 max-h-96 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom lg:w-full">
+        <div className="w-3/4 max-h-96 m-auto flex flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll mt-10 mb-10 scrollbar-custom lg:w-10/12">
           {filteredList?.map((i) => (
             <a
               key={i.param}
