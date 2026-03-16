@@ -116,7 +116,7 @@ export default function CharacterDetail() {
           <li>Peso: {data?.weight ?? '-'}</li>
         </ul>
         <h2 className="font-bold">Dados coletados:</h2>
-        <p className="overflow-y-auto">
+        <p className="overflow-y-auto scrollbar-custom">
           {data?.bio ?? 'Sem biografia disponível.'}
         </p>
       </div>
